@@ -57,10 +57,10 @@
 
     [Flux.GetProcessStatus]
     public ProcessStatus Status { get; set; }
+    
+    private string WandererName { get => ScrapConfig.getCharacterNameOverride("Wanderer"); set => ScrapConfig.setCharacterNameOverride("Wanderer", value); }
 
     public bool Enabled => ArtifactCollectionStatus.IsAvailable && CharacterCollectionStatus.IsAvailable;
-
-    private string WandererName { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,10 +71,6 @@
 
     public bool HandleSubmit()
     {
-        if (string.IsNullOrEmpty(WandererName))
-            ScrapConfig.CharacterNameOverrides.Remove("Wanderer");
-        else
-            ScrapConfig.CharacterNameOverrides["Wanderer"] = WandererName;
         ScrapConfig.Save();
         return ArtifactScrapper.Start(Data);
     }
